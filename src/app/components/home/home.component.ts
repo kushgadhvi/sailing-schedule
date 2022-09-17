@@ -7,6 +7,7 @@ import { SelectLocationComponent } from '../select-location/select-location.comp
 import { DialogService } from '../../services/dialog/dialog.service';
 import { DialogRef } from '../../services/dialog/dialog-ref';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { SchedulesTableComponent } from '../schedules-table/schedules-table.component';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('fromLocation')
   fromLocation: SelectLocationComponent = new SelectLocationComponent();
 
+  @ViewChild('schedulesTable')
+  schedulesTable: SchedulesTableComponent;
+
   constructor(
     private sailingSchedulesService: SailingSchedulesService,
     private dialog: DialogService
@@ -50,16 +54,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.removeSubscriptions();
   }
   public getSchedules(): void {
-    this.dialogRef = this.dialog.open(SpinnerComponent, {
-      data: 'Please Wait Schedules are getting loaded....',
-    });
     const toLocationCode = this.toLocation.Location.unCode;
     const fromLocationCode = this.fromLocation.Location.unCode;
     if (toLocationCode && fromLocationCode) {
+      this.dialogRef = this.dialog.open(SpinnerComponent, {
+        data: 'Please Wait Schedules are getting loaded....',
+      });
       this.sailingSchedulesService.fetchSchedules(
         toLocationCode,
         fromLocationCode
       );
+    } else {
+      this.schedulesTable.showTable = false;
+      this.schedulesTable.displayMsg = 'Please Enter Valid Values.';
     }
   }
 
