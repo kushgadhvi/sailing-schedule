@@ -1,0 +1,22 @@
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>{{ title }}</mat-label>
+    <input
+      type="text"
+      [formControl]="myControl"
+      matInput
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <cdk-virtual-scroll-viewport [ngStyle]="{ height: height }" itemSize="10">
+        <mat-option
+          class="autocomplete-item"
+          *cdkVirtualFor="let option of filteredOptions"
+          [value]="option"
+        >
+          {{ option.name }}
+        </mat-option>
+      </cdk-virtual-scroll-viewport>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
